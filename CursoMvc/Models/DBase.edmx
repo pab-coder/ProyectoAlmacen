@@ -1,0 +1,512 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="cursomvcModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="categoryOfMachines">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="category" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="cstate">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="items">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="partnumber" Type="varchar" MaxLength="200" />
+          <Property Name="description" Type="varchar" MaxLength="200" />
+          <Property Name="ilustration" Type="image" />
+          <Property Name="idmachine" Type="int" Nullable="false" />
+          <Property Name="quantity" Type="int" Nullable="false" />
+          <Property Name="idstatus" Type="int" />
+        </EntityType>
+        <EntityType Name="location">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="location" Type="varchar" MaxLength="50" />
+          <Property Name="idstatus" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="lpn">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="lpn" Type="varchar" MaxLength="50" />
+          <Property Name="partumber" Type="varchar" MaxLength="50" />
+          <Property Name="idocation" Type="int" />
+          <Property Name="quantity" Type="int" />
+          <Property Name="idstatus" Type="int" />
+        </EntityType>
+        <EntityType Name="machines">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="machineName" Type="varchar" MaxLength="50" />
+          <Property Name="idCategory" Type="int" Nullable="false" />
+          <Property Name="idStatus" Type="int" />
+        </EntityType>
+        <EntityType Name="purchaseOrder">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="purchaseorder" Type="varchar" MaxLength="50" />
+          <Property Name="invoice" Type="varchar" MaxLength="50" />
+          <Property Name="partnumber" Type="varchar" MaxLength="50" />
+          <Property Name="quantity" Type="int" />
+          <Property Name="orderdate" Type="datetime" />
+          <Property Name="datein" Type="datetime" />
+          <Property Name="lpn" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="sparepartLocation">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idlocation" Type="int" />
+          <Property Name="username" Type="varchar" MaxLength="200" />
+          <Property Name="dateUpdate" Type="datetime" />
+          <Property Name="quantity" Type="int" />
+          <Property Name="partnumber" Type="varchar" MaxLength="50" />
+          <Property Name="lpn" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="email" Type="varchar" MaxLength="50" />
+          <Property Name="password" Type="varchar" MaxLength="100" />
+          <Property Name="idState" Type="int" />
+          <Property Name="edad" Type="int" />
+          <Property Name="name" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <Association Name="FK_items_machines">
+          <End Role="cstate" Type="Self.cstate" Multiplicity="0..1" />
+          <End Role="items" Type="Self.items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cstate">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="items">
+              <PropertyRef Name="idstatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_lpn_location">
+          <End Role="cstate" Type="Self.cstate" Multiplicity="0..1" />
+          <End Role="lpn" Type="Self.lpn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cstate">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="lpn">
+              <PropertyRef Name="idstatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_machines_machines">
+          <End Role="categoryOfMachines" Type="Self.categoryOfMachines" Multiplicity="1" />
+          <End Role="machines" Type="Self.machines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="categoryOfMachines">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="machines">
+              <PropertyRef Name="idCategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_sparepartLocation_location">
+          <End Role="location" Type="Self.location" Multiplicity="0..1" />
+          <End Role="sparepartLocation" Type="Self.sparepartLocation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="location">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="sparepartLocation">
+              <PropertyRef Name="idlocation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_cstate">
+          <End Role="cstate" Type="Self.cstate" Multiplicity="0..1" />
+          <End Role="user" Type="Self.user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cstate">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="user">
+              <PropertyRef Name="idState" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="cursomvcModelStoreContainer">
+          <EntitySet Name="categoryOfMachines" EntityType="Self.categoryOfMachines" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="cstate" EntityType="Self.cstate" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="items" EntityType="Self.items" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="location" EntityType="Self.location" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="lpn" EntityType="Self.lpn" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="machines" EntityType="Self.machines" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="purchaseOrder" EntityType="Self.purchaseOrder" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sparepartLocation" EntityType="Self.sparepartLocation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="user" EntityType="Self.user" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_items_machines" Association="Self.FK_items_machines">
+            <End Role="cstate" EntitySet="cstate" />
+            <End Role="items" EntitySet="items" />
+          </AssociationSet>
+          <AssociationSet Name="FK_lpn_location" Association="Self.FK_lpn_location">
+            <End Role="cstate" EntitySet="cstate" />
+            <End Role="lpn" EntitySet="lpn" />
+          </AssociationSet>
+          <AssociationSet Name="FK_machines_machines" Association="Self.FK_machines_machines">
+            <End Role="categoryOfMachines" EntitySet="categoryOfMachines" />
+            <End Role="machines" EntitySet="machines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_sparepartLocation_location" Association="Self.FK_sparepartLocation_location">
+            <End Role="location" EntitySet="location" />
+            <End Role="sparepartLocation" EntitySet="sparepartLocation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_cstate" Association="Self.FK_user_cstate">
+            <End Role="cstate" EntitySet="cstate" />
+            <End Role="user" EntitySet="user" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="cursomvcModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="cursomvcEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="categoryOfMachines" EntityType="cursomvcModel.categoryOfMachines" />
+          <EntitySet Name="cstate" EntityType="cursomvcModel.cstate" />
+          <EntitySet Name="items" EntityType="cursomvcModel.items" />
+          <EntitySet Name="location" EntityType="cursomvcModel.location" />
+          <EntitySet Name="lpn" EntityType="cursomvcModel.lpn" />
+          <EntitySet Name="machines" EntityType="cursomvcModel.machines" />
+          <EntitySet Name="purchaseOrder" EntityType="cursomvcModel.purchaseOrder" />
+          <EntitySet Name="sparepartLocation" EntityType="cursomvcModel.sparepartLocation" />
+          <EntitySet Name="user" EntityType="cursomvcModel.user" />
+          <AssociationSet Name="FK_machines_machines" Association="cursomvcModel.FK_machines_machines">
+            <End Role="categoryOfMachines" EntitySet="categoryOfMachines" />
+            <End Role="machines" EntitySet="machines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_items_machines" Association="cursomvcModel.FK_items_machines">
+            <End Role="cstate" EntitySet="cstate" />
+            <End Role="items" EntitySet="items" />
+          </AssociationSet>
+          <AssociationSet Name="FK_lpn_location" Association="cursomvcModel.FK_lpn_location">
+            <End Role="cstate" EntitySet="cstate" />
+            <End Role="lpn" EntitySet="lpn" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_cstate" Association="cursomvcModel.FK_user_cstate">
+            <End Role="cstate" EntitySet="cstate" />
+            <End Role="user" EntitySet="user" />
+          </AssociationSet>
+          <AssociationSet Name="FK_sparepartLocation_location" Association="cursomvcModel.FK_sparepartLocation_location">
+            <End Role="location" EntitySet="location" />
+            <End Role="sparepartLocation" EntitySet="sparepartLocation" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="categoryOfMachines">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="category" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="machines" Relationship="cursomvcModel.FK_machines_machines" FromRole="categoryOfMachines" ToRole="machines" />
+        </EntityType>
+        <EntityType Name="cstate">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="items" Relationship="cursomvcModel.FK_items_machines" FromRole="cstate" ToRole="items" />
+          <NavigationProperty Name="lpn" Relationship="cursomvcModel.FK_lpn_location" FromRole="cstate" ToRole="lpn" />
+          <NavigationProperty Name="user" Relationship="cursomvcModel.FK_user_cstate" FromRole="cstate" ToRole="user" />
+        </EntityType>
+        <EntityType Name="items">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="partnumber" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="description" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="ilustration" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="idmachine" Type="Int32" Nullable="false" />
+          <Property Name="quantity" Type="Int32" Nullable="false" />
+          <Property Name="idstatus" Type="Int32" />
+          <NavigationProperty Name="cstate" Relationship="cursomvcModel.FK_items_machines" FromRole="items" ToRole="cstate" />
+        </EntityType>
+        <EntityType Name="location">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="location1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="idstatus" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="sparepartLocation" Relationship="cursomvcModel.FK_sparepartLocation_location" FromRole="location" ToRole="sparepartLocation" />
+        </EntityType>
+        <EntityType Name="lpn">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="lpn1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="partumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="idocation" Type="Int32" />
+          <Property Name="quantity" Type="Int32" />
+          <Property Name="idstatus" Type="Int32" />
+          <NavigationProperty Name="cstate" Relationship="cursomvcModel.FK_lpn_location" FromRole="lpn" ToRole="cstate" />
+        </EntityType>
+        <EntityType Name="machines">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="machineName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="idCategory" Type="Int32" Nullable="false" />
+          <Property Name="idStatus" Type="Int32" />
+          <NavigationProperty Name="categoryOfMachines" Relationship="cursomvcModel.FK_machines_machines" FromRole="machines" ToRole="categoryOfMachines" />
+        </EntityType>
+        <EntityType Name="purchaseOrder">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="purchaseorder1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="invoice" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="partnumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="quantity" Type="Int32" />
+          <Property Name="orderdate" Type="DateTime" Precision="3" />
+          <Property Name="datein" Type="DateTime" Precision="3" />
+          <Property Name="lpn" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="sparepartLocation">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idlocation" Type="Int32" />
+          <Property Name="username" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="dateUpdate" Type="DateTime" Precision="3" />
+          <Property Name="quantity" Type="Int32" />
+          <Property Name="partnumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="lpn" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="location" Relationship="cursomvcModel.FK_sparepartLocation_location" FromRole="sparepartLocation" ToRole="location" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="idState" Type="Int32" />
+          <Property Name="edad" Type="Int32" />
+          <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="cstate" Relationship="cursomvcModel.FK_user_cstate" FromRole="user" ToRole="cstate" />
+        </EntityType>
+        <Association Name="FK_machines_machines">
+          <End Type="cursomvcModel.categoryOfMachines" Role="categoryOfMachines" Multiplicity="1" />
+          <End Type="cursomvcModel.machines" Role="machines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="categoryOfMachines">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="machines">
+              <PropertyRef Name="idCategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_items_machines">
+          <End Type="cursomvcModel.cstate" Role="cstate" Multiplicity="0..1" />
+          <End Type="cursomvcModel.items" Role="items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cstate">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="items">
+              <PropertyRef Name="idstatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_lpn_location">
+          <End Type="cursomvcModel.cstate" Role="cstate" Multiplicity="0..1" />
+          <End Type="cursomvcModel.lpn" Role="lpn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cstate">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="lpn">
+              <PropertyRef Name="idstatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_cstate">
+          <End Type="cursomvcModel.cstate" Role="cstate" Multiplicity="0..1" />
+          <End Type="cursomvcModel.user" Role="user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cstate">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="user">
+              <PropertyRef Name="idState" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_sparepartLocation_location">
+          <End Type="cursomvcModel.location" Role="location" Multiplicity="0..1" />
+          <End Type="cursomvcModel.sparepartLocation" Role="sparepartLocation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="location">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="sparepartLocation">
+              <PropertyRef Name="idlocation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="cursomvcModelStoreContainer" CdmEntityContainer="cursomvcEntities">
+          <EntitySetMapping Name="categoryOfMachines">
+            <EntityTypeMapping TypeName="cursomvcModel.categoryOfMachines">
+              <MappingFragment StoreEntitySet="categoryOfMachines">
+                <ScalarProperty Name="category" ColumnName="category" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cstate">
+            <EntityTypeMapping TypeName="cursomvcModel.cstate">
+              <MappingFragment StoreEntitySet="cstate">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="items">
+            <EntityTypeMapping TypeName="cursomvcModel.items">
+              <MappingFragment StoreEntitySet="items">
+                <ScalarProperty Name="idstatus" ColumnName="idstatus" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="idmachine" ColumnName="idmachine" />
+                <ScalarProperty Name="ilustration" ColumnName="ilustration" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="partnumber" ColumnName="partnumber" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="location">
+            <EntityTypeMapping TypeName="cursomvcModel.location">
+              <MappingFragment StoreEntitySet="location">
+                <ScalarProperty Name="idstatus" ColumnName="idstatus" />
+                <ScalarProperty Name="location1" ColumnName="location" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="lpn">
+            <EntityTypeMapping TypeName="cursomvcModel.lpn">
+              <MappingFragment StoreEntitySet="lpn">
+                <ScalarProperty Name="idstatus" ColumnName="idstatus" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="idocation" ColumnName="idocation" />
+                <ScalarProperty Name="partumber" ColumnName="partumber" />
+                <ScalarProperty Name="lpn1" ColumnName="lpn" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="machines">
+            <EntityTypeMapping TypeName="cursomvcModel.machines">
+              <MappingFragment StoreEntitySet="machines">
+                <ScalarProperty Name="idStatus" ColumnName="idStatus" />
+                <ScalarProperty Name="idCategory" ColumnName="idCategory" />
+                <ScalarProperty Name="machineName" ColumnName="machineName" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="purchaseOrder">
+            <EntityTypeMapping TypeName="cursomvcModel.purchaseOrder">
+              <MappingFragment StoreEntitySet="purchaseOrder">
+                <ScalarProperty Name="lpn" ColumnName="lpn" />
+                <ScalarProperty Name="datein" ColumnName="datein" />
+                <ScalarProperty Name="orderdate" ColumnName="orderdate" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="partnumber" ColumnName="partnumber" />
+                <ScalarProperty Name="invoice" ColumnName="invoice" />
+                <ScalarProperty Name="purchaseorder1" ColumnName="purchaseorder" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sparepartLocation">
+            <EntityTypeMapping TypeName="cursomvcModel.sparepartLocation">
+              <MappingFragment StoreEntitySet="sparepartLocation">
+                <ScalarProperty Name="lpn" ColumnName="lpn" />
+                <ScalarProperty Name="partnumber" ColumnName="partnumber" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="dateUpdate" ColumnName="dateUpdate" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="idlocation" ColumnName="idlocation" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user">
+            <EntityTypeMapping TypeName="cursomvcModel.user">
+              <MappingFragment StoreEntitySet="user">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="edad" ColumnName="edad" />
+                <ScalarProperty Name="idState" ColumnName="idState" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
